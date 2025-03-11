@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add your custom styles below this line */
+.App {
+  text-align: center;
+  padding: 20px;
+}
