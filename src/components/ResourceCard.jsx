@@ -23,7 +23,7 @@ const Tag = memo(({ label }) => (
 
 Tag.displayName = 'Tag';
 
-// Enhanced ResourceCard component with improved design
+// Enhanced ResourceCard component with fixed height and no animation
 export const ResourceCard = ({
   title,
   description,
@@ -33,12 +33,6 @@ export const ResourceCard = ({
   openInNewTab = true,
   accentColor = 'bg-gradient-to-r from-blue-500/50 to-purple-500/50'
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Use useCallback for event handlers
-  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
-  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
-
   const handleClick = useCallback(() => {
     if (url) {
       window.open(url, openInNewTab ? '_blank' : '_self');
@@ -47,30 +41,25 @@ export const ResourceCard = ({
 
   return (
     <BaseCard
-      className="w-80 overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-102"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className="w-80 h-54 min-h-54 overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-102"
       onClick={handleClick}
     >
       {/* Top accent bar */}
       <div className={`h-1.5 w-full ${accentColor}`} />
 
-      {/* Main background with subtle animation */}
+      {/* Main background */}
       <div
-        className={`
+        className="
           absolute
           inset-0
           mt-1.5
           bg-gradient-to-b
           from-gray-800/90
           to-gray-900/90
-          transition-all
-          duration-500
-          ${isHovered ? 'opacity-100' : 'opacity-90'}
-        `}
+        "
       />
 
-      {/* Subtle animated mesh background pattern */}
+      {/* Subtle mesh background pattern */}
       <div
         className="
           absolute
@@ -89,7 +78,7 @@ export const ResourceCard = ({
       {/* Content container with improved spacing */}
       <div className="relative p-5 flex flex-col gap-3 z-10">
         <div className="flex items-center gap-3">
-          <div className={`
+          <div className="
             flex
             justify-center
             items-center
@@ -97,10 +86,7 @@ export const ResourceCard = ({
             h-10
             rounded-lg
             bg-white/10
-            ${isHovered ? 'scale-110' : 'scale-100'}
-            transition-transform
-            duration-300
-          `}>
+          ">
             <span className="text-2xl">{icon}</span>
           </div>
           <h3 className="text-lg font-medium text-white">{title}</h3>
@@ -116,27 +102,6 @@ export const ResourceCard = ({
             ))}
           </div>
         )}
-
-        {/* Improved action button */}
-        <div
-          className={`
-            mt-3
-            self-end
-            px-4
-            py-1.5
-            rounded-lg
-            ${accentColor}
-            text-white
-            font-medium
-            text-sm
-            transition-all
-            duration-300
-            shadow-lg
-            ${isHovered ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-0'}
-          `}
-        >
-          Visit Resource →
-        </div>
       </div>
     </BaseCard>
   );
