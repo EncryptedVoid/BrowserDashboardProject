@@ -1,12 +1,14 @@
-import React, { useState, useCallback, memo } from 'react';
+import React, { useState, useCallback } from 'react';
 import BaseCard from './BaseCard';
 
 // QuickLinkCard component - compact design with just logo and name
 export const QuickLinkCard = ({
   name,
   icon,
+  iconPath, // Added iconPath prop for compatibility
+  color, // Added color prop for compatibility
   url,
-  accentColor = 'from-blue-500/40 to-blue-600/40',
+  accentColor,
   openInNewTab = true,
   width = 'w-48'
 }) => {
@@ -20,6 +22,41 @@ export const QuickLinkCard = ({
       window.open(url, openInNewTab ? '_blank' : '_self');
     }
   }, [url, openInNewTab]);
+
+  // Determine accent color from props
+  const computedAccentColor = accentColor ||
+    (color ? `from-[${color}]/40 to-[${color}]/60` : 'from-blue-500/40 to-blue-600/40');
+
+  // Determine icon to display
+  const renderIcon = () => {
+    // If we have a direct emoji-style icon, use it
+    if (icon && typeof icon === 'string' && icon.length <= 2) {
+      return <span className="text-lg">{icon}</span>;
+    }
+
+    // If we have an icon name/identifier, you can map to symbols or use the name
+    if (icon && typeof icon === 'string') {
+      // Map common icon names to symbols or just show first letter
+      const iconMapping = {
+        'youtube': '▶️',
+        'github': '🐙',
+        'linkedin': 'in',
+        'claude': '🤖',
+        'chatgpt': '💬',
+        'devto': '👨‍💻',
+        'dex': '📊',
+        'finance': '💰',
+        'problem': '🧩',
+        'docs': '📄',
+        'education': '🎓'
+      };
+
+      return <span className="text-lg">{iconMapping[icon.toLowerCase()] || icon[0].toUpperCase()}</span>;
+    }
+
+    // Default fallback
+    return <span className="text-lg">🔗</span>;
+  };
 
   return (
     <BaseCard
@@ -42,7 +79,7 @@ export const QuickLinkCard = ({
           absolute
           inset-0
           bg-gradient-to-r
-          ${accentColor}
+          ${computedAccentColor}
           opacity-80
           transition-all
           duration-300
@@ -79,7 +116,7 @@ export const QuickLinkCard = ({
           duration-300
           ${isHovered ? 'scale-110' : 'scale-100'}
         `}>
-          <span className="text-lg">{icon}</span>
+          {renderIcon()}
         </div>
 
         {/* Name */}

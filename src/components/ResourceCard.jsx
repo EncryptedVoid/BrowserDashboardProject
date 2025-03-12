@@ -23,21 +23,134 @@ const Tag = memo(({ label }) => (
 
 Tag.displayName = 'Tag';
 
-// Enhanced ResourceCard component with fixed height and no animation
+// Category to icon mapping for fallbacks
+const categoryIcons = {
+  'programming': '💻',
+  'career': '📈',
+  'ai': '🤖',
+  'security': '🔒',
+  'design': '🎨',
+  'architecture': '🏗️',
+  'devops': '⚙️',
+  'cloud': '☁️',
+  'data-science': '📊',
+  'blockchain': '⛓️'
+};
+
+// Enhanced ResourceCard component with improved image handling
 export const ResourceCard = ({
   title,
   description,
   icon,
+  image, // Add image prop for compatibility
   url,
+  category, // Use category for fallback icon
   tags = [],
   openInNewTab = true,
   accentColor = 'bg-gradient-to-r from-blue-500/50 to-purple-500/50'
 }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   const handleClick = useCallback(() => {
     if (url) {
       window.open(url, openInNewTab ? '_blank' : '_self');
     }
   }, [url, openInNewTab]);
+
+  // Handle image load success
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
+
+  // Handle image load error
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
+
+  // Determine what to use for the icon display - fallback mechanisms
+  const renderIcon = () => {
+    // If there's a direct icon provided, use it
+    if (icon) {
+      return <span className="text-2xl">{icon}</span>;
+    }
+
+    // If there's an image path and no error loading it
+    if (image && !imageError) {
+      // For paths that start with '/', try multiple approaches
+      if (image.startsWith('/')) {
+        return (
+          <>
+            {/* Hidden image to test loading - tries with and without the slash */}
+            <img
+              src={image}
+              alt=""
+              className="hidden"
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+            />
+
+            {/* If image loaded successfully, show it */}
+            {imageLoaded && (
+              <img
+                src={image}
+                alt={title}
+                className="w-8 h-8 object-contain"
+              />
+            )}
+
+            {/* While loading or if error, show category icon or placeholder */}
+            {!imageLoaded && (
+              <span className="text-2xl">
+                {category && categoryIcons[category] ? categoryIcons[category] : '📄'}
+              </span>
+            )}
+          </>
+        );
+      }
+
+      // For full URLs, directly use the image
+      return (
+        <img
+          src={image}
+          alt={title}
+          className="w-8 h-8 object-contain"
+          onError={handleImageError}
+        />
+      );
+    }
+
+    // Fallback to category icon or default
+    return (
+      <span className="text-2xl">
+        {category && categoryIcons[category] ? categoryIcons[category] : '📄'}
+      </span>
+    );
+  };
+
+  // Generate gradient based on category if no accentColor provided
+  const getCategoryGradient = () => {
+    if (accentColor !== 'bg-gradient-to-r from-blue-500/50 to-purple-500/50') {
+      return accentColor;
+    }
+
+    const categoryGradients = {
+      'programming': 'bg-gradient-to-r from-blue-500/50 to-indigo-500/50',
+      'career': 'bg-gradient-to-r from-green-500/50 to-teal-500/50',
+      'ai': 'bg-gradient-to-r from-purple-500/50 to-violet-500/50',
+      'security': 'bg-gradient-to-r from-red-500/50 to-rose-500/50',
+      'design': 'bg-gradient-to-r from-pink-500/50 to-rose-500/50',
+      'architecture': 'bg-gradient-to-r from-slate-500/50 to-gray-500/50',
+      'devops': 'bg-gradient-to-r from-cyan-500/50 to-blue-500/50',
+      'cloud': 'bg-gradient-to-r from-sky-500/50 to-indigo-500/50',
+      'data-science': 'bg-gradient-to-r from-emerald-500/50 to-green-500/50',
+      'blockchain': 'bg-gradient-to-r from-amber-500/50 to-orange-500/50'
+    };
+
+    return category && categoryGradients[category]
+      ? categoryGradients[category]
+      : 'bg-gradient-to-r from-blue-500/50 to-purple-500/50';
+  };
 
   return (
     <BaseCard
@@ -45,7 +158,7 @@ export const ResourceCard = ({
       onClick={handleClick}
     >
       {/* Top accent bar */}
-      <div className={`h-1.5 w-full ${accentColor}`} />
+      <div className={`h-1.5 w-full ${getCategoryGradient()}`} />
 
       {/* Main background */}
       <div
@@ -87,7 +200,7 @@ export const ResourceCard = ({
             rounded-lg
             bg-white/10
           ">
-            <span className="text-2xl">{icon}</span>
+            {renderIcon()}
           </div>
           <h3 className="text-lg font-medium text-white">{title}</h3>
         </div>

@@ -4,7 +4,7 @@ import QuickLinkCard from './QuickLinkCard';
 import ResourceCard from './ResourceCard';
 import AgentCard from './AgentCard';
 import FilteredCarousel from './FilteredCarousel';
-import cardGradients from './cardGradients';
+import TimeCluster from './TimeCluster';
 
 // Export individual components
 export { BaseCard };
@@ -12,7 +12,7 @@ export { QuickLinkCard };
 export { ResourceCard };
 export { AgentCard };
 export { FilteredCarousel };
-export { cardGradients };
+export { TimeCluster };
 
 // Export as a single object
 const components = {
@@ -21,7 +21,7 @@ const components = {
   ResourceCard,
   AgentCard,
   FilteredCarousel,
-  cardGradients
+  TimeCluster
 };
 
 export default components;

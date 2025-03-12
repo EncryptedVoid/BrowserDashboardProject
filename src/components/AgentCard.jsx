@@ -1,3 +1,4 @@
+// Modified AgentCard.jsx to handle the property name differences
 import React, { useState, useCallback, memo } from 'react';
 import BaseCard from './BaseCard';
 
@@ -15,9 +16,12 @@ AnimatedEmoji.displayName = 'AnimatedEmoji';
 // The AgentCard component with compact design (no description)
 export const AgentCard = ({
   title,
+  name, // Add name prop for compatibility
   emoji,
+  icon, // Add icon prop for compatibility
   bgGradient = 'from-purple-500/30 to-blue-500/30',
   onClick,
+  url, // Add url prop for compatibility
   width = 'w-64',
   height = 'h-20' // Reduced height since we removed description
 }) => {
@@ -26,6 +30,20 @@ export const AgentCard = ({
   // Use useCallback for event handlers
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
+  // Handle click with URL if provided
+  const handleClick = useCallback(() => {
+    if (onClick) {
+      onClick();
+    } else if (url) {
+      window.open(url, '_blank');
+    }
+  }, [onClick, url]);
+
+  // Use name prop if title is not provided
+  const displayTitle = title || name;
+  // Use icon prop if emoji is not provided
+  const displayEmoji = emoji || icon;
 
   return (
     <BaseCard
@@ -39,7 +57,7 @@ export const AgentCard = ({
       `}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {/* Animated background gradient */}
       <div
@@ -71,8 +89,8 @@ export const AgentCard = ({
 
       {/* Content container - simplified with just title and emoji */}
       <div className="relative p-4 h-full flex items-center justify-between z-10">
-        <h3 className="text-xl font-semibold text-white">{title}</h3>
-        <AnimatedEmoji emoji={emoji} />
+        <h3 className="text-xl font-semibold text-white">{displayTitle}</h3>
+        <AnimatedEmoji emoji={displayEmoji} />
       </div>
     </BaseCard>
   );
