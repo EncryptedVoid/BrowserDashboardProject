@@ -4,13 +4,12 @@ import { AgentCard, ResourceCard, QuickLinkCard, cardGradients } from './compone
 
 function App() {
   return (
-    <div className="App bg-gray-900">
+    <div className="App bg-gray-900 flex flex-col items-center justify-center gap-6">
       <TimeCluster />
 
       {/* Quick Links Section */}
-      <div className="p-8 pt-4 bg-gray-900 border-b border-gray-800">
-        <h2 className="text-xl font-bold text-white mb-4">Quick Links</h2>
-        <div className="flex flex-wrap gap-3 pb-2">
+      <div className="p-8 pt-4 bg-gray-900 border-b border-gray-800 flex flex-row items-center justify-center flex-wrap">
+        <div className="flex-wrap flex flex-row items-center justify-center gap-3 pb-2">
           <QuickLinkCard
             name="GitHub"
             icon="🐙"
@@ -70,9 +69,8 @@ function App() {
       </div>
 
       {/* Main Content Area */}
-      <div className="p-8 bg-gray-900 min-h-screen">
-        <h2 className="text-2xl font-bold text-white mb-6">Agent Cards</h2>
-        <div className="flex flex-wrap gap-4 mb-12">
+      <div className="p-8 bg-gray-900 min-h-screen flex-wrap flex flex-row items-center justify-center">
+        <div className="flex-wrap flex flex-row items-center justify-center gap-4 mb-12">
           <AgentCard
             title="AI Assistant"
             emoji="🤖"
@@ -130,8 +128,7 @@ function App() {
           />
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-6">Resource Cards</h2>
-        <div className="flex flex-wrap gap-6 mb-10">
+        <div className="flex flex-row items-center justify-center flex-wrap gap-6 mb-10">
           <ResourceCard
             title="React Documentation"
             description="Official guides and API reference for React developers."
@@ -188,8 +185,7 @@ function App() {
         </div>
 
         {/* Additional Quick Links Section (Categorized) */}
-        <h2 className="text-2xl font-bold text-white mb-4">Development Links</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        <div className="flex flex-row items-center justify-center flex-wrap md:grid-cols-4 gap-3 mb-8">
           <QuickLinkCard
             name="MDN Web Docs"
             icon="📔"
@@ -219,8 +215,7 @@ function App() {
           />
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-4">Design Tools</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="flex flex-row items-center justify-center flex-wrap gap-3">
           <QuickLinkCard
             name="Coolors"
             icon="🎨"
